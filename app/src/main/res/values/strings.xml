@@ -5,4 +5,14 @@
     <string name="now_playing">Now Playing</string>
     <string name="upcoming">Upcoming</string>
     <string name="movie_details">Movie Details</string>
+    <string name="movie_title">Title</string>
+    <string name="movie_overview">Overview</string>
+    <string name="movie_runtime">Runtime</string>
+    <string name="img">img</string>
+    <string name="movie_genre">Genre</string>
+    <string name="movie_tagline">Tagline</string>
+    <string name="movie_popularity">Popularity</string>
+    <string name="movie_release_date">Release Date</string>
+    <string name="movie_vote">Vote Count</string>
+    <string name="movie_companies">Production Companies</string>
 </resources>
