@@ -20,7 +20,7 @@ import com.fei.damovie.model.NowPlaying;
 
 import java.util.List;
 
-public class NowPlayingAdapter extends RecyclerView.Adapter<NowPlayingAdapter.NowPlayingViewHolder> {
+public class NowPlayingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
     private List<NowPlaying.Results> nowPlayingList;
@@ -39,32 +39,67 @@ public class NowPlayingAdapter extends RecyclerView.Adapter<NowPlayingAdapter.No
 
     @NonNull
     @Override
-    public NowPlayingAdapter.NowPlayingViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_movie, parent, false);
-        return new NowPlayingAdapter.NowPlayingViewHolder(view);
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        if (viewType != 0) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_movie, parent, false);
+            return new NowPlayingAdapter.NowPlayingViewHolder(view);
+        } else {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.default_progress_bar, parent, false);
+            return new NowPlayingAdapter.ProgressBarViewHolder(view);
+        }
+
     }
 
     @Override
-    public void onBindViewHolder(@NonNull NowPlayingAdapter.NowPlayingViewHolder holder, int position) {
-        final NowPlaying.Results results = getNowPlayingList().get(position);
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        if (holder instanceof NowPlayingViewHolder) {
+            final NowPlaying.Results results = getNowPlayingList().get(position);
 
-        holder.movieCard_title_textView.setText(results.getTitle());
-        holder.movieCard_overview_textView.setText(results.getOverview());
+            ((NowPlayingViewHolder) holder).movieCard_title_textView.setText(results.getTitle());
+            ((NowPlayingViewHolder) holder).movieCard_overview_textView.setText(results.getOverview());
 
-        Glide.with(context)
-                .load(Const.IMG_URL+results.getPoster_path())
-                .into(holder.movieCard_poster_imageView);
+            Glide.with(context)
+                    .load(Const.IMG_URL + results.getPoster_path())
+                    .into(((NowPlayingViewHolder) holder).movieCard_poster_imageView);
 
-        holder.movieCard_cardView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            ((NowPlayingViewHolder) holder).movieCard_cardView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
-                Bundle bundle = new Bundle();
-                bundle.putString("movie_id",String.valueOf(results.getId()));
-                Navigation.findNavController(view).navigate(R.id.action_nowPlayingFragment_to_movieDetailsFragment,bundle);
-            }
-        });
+                    Bundle bundle = new Bundle();
+                    bundle.putString("movie_id", String.valueOf(results.getId()));
+                    Navigation.findNavController(view).navigate(R.id.action_nowPlayingFragment_to_movieDetailsFragment, bundle);
+                }
+            });
+        }
     }
+
+    @Override
+    public int getItemViewType(int position) {
+        return nowPlayingList.get(position) == null ? 0 : 1;
+    }
+
+//    @Override
+//    public void onBindViewHolder(@NonNull NowPlayingAdapter.NowPlayingViewHolder holder, int position) {
+//        final NowPlaying.Results results = getNowPlayingList().get(position);
+//
+//        holder.movieCard_title_textView.setText(results.getTitle());
+//        holder.movieCard_overview_textView.setText(results.getOverview());
+//
+//        Glide.with(context)
+//                .load(Const.IMG_URL+results.getPoster_path())
+//                .into(holder.movieCard_poster_imageView);
+//
+//        holder.movieCard_cardView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//
+//                Bundle bundle = new Bundle();
+//                bundle.putString("movie_id",String.valueOf(results.getId()));
+//                Navigation.findNavController(view).navigate(R.id.action_nowPlayingFragment_to_movieDetailsFragment,bundle);
+//            }
+//        });
+//    }
 
     @Override
     public int getItemCount() {
@@ -74,7 +109,7 @@ public class NowPlayingAdapter extends RecyclerView.Adapter<NowPlayingAdapter.No
     public class NowPlayingViewHolder extends RecyclerView.ViewHolder {
 
         CardView movieCard_cardView;
-        TextView movieCard_title_textView,movieCard_overview_textView;
+        TextView movieCard_title_textView, movieCard_overview_textView;
         ImageView movieCard_poster_imageView;
 
         public NowPlayingViewHolder(@NonNull View itemView) {
@@ -85,6 +120,12 @@ public class NowPlayingAdapter extends RecyclerView.Adapter<NowPlayingAdapter.No
             movieCard_overview_textView = itemView.findViewById(R.id.movieCard_overview_textView);
             movieCard_poster_imageView = itemView.findViewById(R.id.movieCard_poster_imageView);
 
+        }
+    }
+
+    public class ProgressBarViewHolder extends RecyclerView.ViewHolder {
+        public ProgressBarViewHolder(View view) {
+            super(view);
         }
     }
 }

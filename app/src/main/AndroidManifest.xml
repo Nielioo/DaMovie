@@ -12,11 +12,17 @@
     <application
         android:allowBackup="true"
         android:hardwareAccelerated="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_damovie"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_damovie_round"
+        android:largeHeap="true"
         android:supportsRtl="true"
         android:theme="@style/Theme.DaMovie">
+        <activity
+            android:name=".view.splash.SplashScreenActivity"
+            android:exported="true">
+
+        </activity>
         <activity
             android:name=".view.main.MainActivity"
             android:exported="true">
@@ -26,6 +32,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

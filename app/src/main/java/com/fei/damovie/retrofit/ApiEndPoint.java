@@ -2,6 +2,7 @@ package com.fei.damovie.retrofit;
 
 import com.fei.damovie.model.Movies;
 import com.fei.damovie.model.NowPlaying;
+import com.fei.damovie.model.Person;
 import com.fei.damovie.model.Upcoming;
 
 import retrofit2.Call;
@@ -26,6 +27,12 @@ public interface ApiEndPoint {
     Call<Upcoming> getUpcoming(
             @Query("api_key") String apiKey,
             @Query("page") int page
+    );
+
+    @GET("person/{person_id}")
+    Call<Person> getPerson(
+            @Path("person_id") String person_id,
+            @Query("api_key") String apiKey
     );
 
 }
