@@ -1,5 +1,6 @@
 package com.fei.damovie.retrofit;
 
+import com.fei.damovie.model.Credits;
 import com.fei.damovie.model.Movies;
 import com.fei.damovie.model.NowPlaying;
 import com.fei.damovie.model.Person;
@@ -29,8 +30,14 @@ public interface ApiEndPoint {
             @Query("page") int page
     );
 
+    @GET("credit/{credit_id}")
+    Call<Credits> getCreditById(
+            @Path("credit_id") String credit_id,
+            @Query("api_key") String apiKey
+    );
+
     @GET("person/{person_id}")
-    Call<Person> getPerson(
+    Call<Person> getPersonById(
             @Path("person_id") String person_id,
             @Query("api_key") String apiKey
     );

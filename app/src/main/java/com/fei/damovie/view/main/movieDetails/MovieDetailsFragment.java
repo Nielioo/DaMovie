@@ -1,6 +1,5 @@
 package com.fei.damovie.view.main.movieDetails;
 
-import android.app.Dialog;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -9,11 +8,9 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.CountDownTimer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -22,10 +19,13 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.fei.damovie.R;
 import com.fei.damovie.adapter.CompanyAdapter;
+import com.fei.damovie.adapter.PersonAdapter;
 import com.fei.damovie.helper.Const;
 import com.fei.damovie.helper.ItemClickSupport;
 import com.fei.damovie.helper.ProgressBarGoogle;
+import com.fei.damovie.model.Credits;
 import com.fei.damovie.model.Movies;
+import com.fei.damovie.viewModel.CreditViewModel;
 import com.fei.damovie.viewModel.MovieViewModel;
 import com.flaviofaria.kenburnsview.KenBurnsView;
 import com.flaviofaria.kenburnsview.RandomTransitionGenerator;
@@ -37,10 +37,12 @@ public class MovieDetailsFragment extends Fragment {
     private KenBurnsView movieDetails_backdrop_kenBurns;
     private ImageView movieDetails_poster_imageView;
     private TextView movieDetails_title_textView, movieDetails_rating_textView,movieDetails_genre_textView, movieDetails_tagline_textView,movieDetails_overview_textView,movieDetails_popularity_textView,movieDetails_vote_textView,movieDetails_releaseDate_textView;
-    private RecyclerView movieDetails_company_recyclerView;
+    private RecyclerView movieDetails_company_recyclerView, movieDetails_cast_recyclerView;
     private ProgressBarGoogle progressBarGoogle;
-    private MovieViewModel viewModel;
+    private MovieViewModel movieViewModel;
+    private CreditViewModel creditViewModel;
     private String movie_id = "";
+    private String credit_id = "";
     private View view;
 
     @Override
@@ -64,10 +66,13 @@ public class MovieDetailsFragment extends Fragment {
 
         movie_id = getArguments().getString("movie_id");
 
-        viewModel = new ViewModelProvider(getActivity()).get(MovieViewModel.class);
+        movieViewModel = new ViewModelProvider(getActivity()).get(MovieViewModel.class);
+        movieViewModel.setResultGetMovieById(movie_id);
+        movieViewModel.getResultGetMovieById().observe(getActivity(), showMovieDetails);
 
-        viewModel.setResultGetMovieById(movie_id);
-        viewModel.getResultGetMovieById().observe(getActivity(), showMovieDetails);
+//        creditViewModel = new ViewModelProvider(getActivity()).get(CreditViewModel.class);
+//        creditViewModel.setResultGetCreditById(credit_id);
+//        creditViewModel.getResultGetCreditById().observe(getActivity(), showCreditDetails);
 
         movieDetails_backdrop_kenBurns = view.findViewById(R.id.movieDetails_backdrop_kenBurns);
         movieDetails_poster_imageView = view.findViewById(R.id.movieDetails_poster_imageView);
@@ -81,6 +86,9 @@ public class MovieDetailsFragment extends Fragment {
         movieDetails_vote_textView = view.findViewById(R.id.movieDetails_vote_textView);
         movieDetails_releaseDate_textView = view.findViewById(R.id.movieDetails_releaseDate_textView);
         movieDetails_company_recyclerView = view.findViewById(R.id.movieDetails_company_recyclerView);
+//        movieDetails_cast_recyclerView = view.findViewById(R.id.movieDetails_cast_recyclerView);
+
+        setAnimation();
     }
 
     private Observer<Movies> showMovieDetails = new Observer<Movies>() {
@@ -134,11 +142,11 @@ public class MovieDetailsFragment extends Fragment {
             movieDetails_releaseDate_textView.setText(releaseDate);
 
             //==Begin of Company RecyclerView
-            LinearLayoutManager layoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
-            CompanyAdapter adapter = new CompanyAdapter(getActivity());
-            adapter.setCompanyList(movies.getProduction_companies());
-            movieDetails_company_recyclerView.setAdapter(adapter);
-            movieDetails_company_recyclerView.setLayoutManager(layoutManager);
+            LinearLayoutManager companylayoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
+            CompanyAdapter companyAdapter = new CompanyAdapter(getActivity());
+            companyAdapter.setCompanyList(movies.getProduction_companies());
+            movieDetails_company_recyclerView.setAdapter(companyAdapter);
+            movieDetails_company_recyclerView.setLayoutManager(companylayoutManager);
 
             ItemClickSupport.addTo(movieDetails_company_recyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
                 @Override
@@ -154,5 +162,29 @@ public class MovieDetailsFragment extends Fragment {
 
         }
     };
+
+//    private Observer<Credits> showCreditDetails = new Observer<Credits>() {
+//        @Override
+//        public void onChanged(Credits credits) {
+//
+//            //==Begin of Credit RecyclerView
+//            LinearLayoutManager personlayoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
+//            PersonAdapter personAdapter = new PersonAdapter(getActivity());
+//            personAdapter.setPersonList();
+//            movieDetails_company_recyclerView.setAdapter(adapter);
+//            movieDetails_company_recyclerView.setLayoutManager(layoutManager);
+//
+//            ItemClickSupport.addTo(movieDetails_company_recyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+//                @Override
+//                public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+//                    String company = productionCompaniesList.get(position).getName();
+//
+//                    Toast.makeText(getActivity(), company, Toast.LENGTH_SHORT).show();
+//                }
+//            });
+//            //==End of Credit RecyclerView
+//
+//        }
+//    };
 
 }

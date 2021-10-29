@@ -16,4 +16,10 @@
     <string name="movie_vote">Vote Count</string>
     <string name="movie_companies">Production Companies</string>
     <string name="damovie">DaMovie</string>
+    <string name="person_name">Name</string>
+    <string name="person_bio">Bio</string>
+    <string name="person_birthday">Birthday</string>
+    <string name="person_birthplace">Birthplace</string>
+    <string name="person_popularity">Popularity</string>
+    <string name="movie_cast">Cast</string>
 </resources>

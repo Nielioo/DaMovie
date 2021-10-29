@@ -49,15 +49,13 @@ public class CompanyAdapter extends RecyclerView.Adapter<CompanyAdapter.CompanyV
 
         if(company.getLogo_path()==null){
             Glide.with(context)
-                    .load(R.drawable.ic_baseline_photo)
+                    .load(R.drawable.damovie_icon)
                     .into(holder.company_logo_imageView);
         } else {
             Glide.with(context)
                     .load(Const.IMG_URL+company.getLogo_path())
                     .into(holder.company_logo_imageView);
         }
-
-
 
     }
 

@@ -32,5 +32,18 @@
             android:name="movie_id"
             app:argType="string"
             android:defaultValue="null" />
+        <action
+            android:id="@+id/action_movieDetailsFragment_to_personDetailsFragment"
+            app:destination="@id/personDetailsFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/personDetailsFragment"
+        android:name="com.fei.damovie.view.main.personDetails.PersonDetailsFragment"
+        android:label="Person Details"
+        tools:layout="@layout/fragment_person_details" >
+        <argument
+            android:name="person_id"
+            app:argType="string"
+            android:defaultValue="null" />
     </fragment>
 </navigation>
