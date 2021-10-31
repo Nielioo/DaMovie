@@ -9,6 +9,9 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.fei.damovie.model.Movies;
 import com.fei.damovie.model.NowPlaying;
+import com.fei.damovie.model.Popular;
+import com.fei.damovie.model.TopRated;
+import com.fei.damovie.model.Trending;
 import com.fei.damovie.model.Upcoming;
 import com.fei.damovie.model.Videos;
 import com.fei.damovie.repository.MovieRepository;
@@ -58,6 +61,30 @@ public class MovieViewModel extends AndroidViewModel {
 
     //==End of viewModel getUpcoming
 
+    //==Begin of viewModel getPopular
+
+    private MutableLiveData<Popular> resultGetPopular = new MutableLiveData<>();
+    public void setResultGetPopular(int page){
+        resultGetPopular = repository.getPopularData(page);
+    }
+    public LiveData<Popular> getResultGetPopular(){
+        return resultGetPopular;
+    }
+
+    //==End of viewModel getPopular
+
+    //==Begin of viewModel getTopRated
+
+    private MutableLiveData<TopRated> resultGetTopRated = new MutableLiveData<>();
+    public void setResultGetTopRated(int page){
+        resultGetTopRated = repository.getTopRatedData(page);
+    }
+    public LiveData<TopRated> getResultGetTopRated(){
+        return resultGetTopRated;
+    }
+
+    //==End of viewModel getTopRated
+
     //==Begin of viewModel getVideoByMovieId
 
     private MutableLiveData<Videos> resultGetVideoByMovieId = new MutableLiveData<>();
@@ -69,5 +96,17 @@ public class MovieViewModel extends AndroidViewModel {
     }
 
     //==End of viewModel getVideoByMovieId
+
+    //==Begin of viewModel getTrending
+
+    private MutableLiveData<Trending> resultGetTrending = new MutableLiveData<>();
+    public void setResultGetTrending(String media_type, String time_window, int page){
+        resultGetTrending = repository.getTrendingData(media_type,time_window,page);
+    }
+    public LiveData<Trending> getResultGetTrending(){
+        return resultGetTrending;
+    }
+
+    //==End of viewModel getTrending
 
 }

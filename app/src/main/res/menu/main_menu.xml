@@ -6,6 +6,10 @@
         android:icon="@drawable/ic_baseline_now_playing"
         android:title="Now Playing" />
     <item
+        android:id="@+id/homeFragment"
+        android:icon="@drawable/ic_baseline_home"
+        android:title="@string/home" />
+    <item
         android:id="@+id/upcomingFragment"
         android:icon="@drawable/ic_baseline_upcoming"
         android:title="Upcoming" />

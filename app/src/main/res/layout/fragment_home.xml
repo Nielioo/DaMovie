@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/home_constraint"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.main.home.HomeFragment">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/textView15"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:fontFamily="@font/nunito_bold"
+                android:text="@string/movie_trending"
+                android:textColor="@color/light_white"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="@+id/home_trending_viewPager"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/home_trending_viewPager"
+                android:layout_width="0dp"
+                android:layout_height="200dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView15" />
+
+            <TextView
+                android:id="@+id/textView10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="36dp"
+                android:fontFamily="@font/nunito_bold"
+                android:text="@string/movie_popular"
+                android:textColor="@color/light_white"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="@+id/home_trending_viewPager"
+                app:layout_constraintTop_toBottomOf="@+id/home_trending_viewPager" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/home_popular_recyclerView"
+                android:layout_width="0dp"
+                android:layout_height="120dp"
+                android:layout_marginTop="24dp"
+                app:layout_constraintEnd_toEndOf="@+id/home_trending_viewPager"
+                app:layout_constraintStart_toStartOf="@+id/home_trending_viewPager"
+                app:layout_constraintTop_toBottomOf="@+id/textView10" />
+
+            <TextView
+                android:id="@+id/textView14"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="36dp"
+                android:fontFamily="@font/nunito_bold"
+                android:text="@string/movie_topRated"
+                android:textColor="@color/light_white"
+                android:textSize="18sp"
+                app:layout_constraintStart_toStartOf="@+id/home_popular_recyclerView"
+                app:layout_constraintTop_toBottomOf="@+id/home_popular_recyclerView" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/home_topRated_recyclerView"
+                android:layout_width="0dp"
+                android:layout_height="120dp"
+                android:layout_marginTop="24dp"
+                app:layout_constraintEnd_toEndOf="@+id/home_popular_recyclerView"
+                app:layout_constraintStart_toStartOf="@+id/home_popular_recyclerView"
+                app:layout_constraintTop_toBottomOf="@+id/textView14" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

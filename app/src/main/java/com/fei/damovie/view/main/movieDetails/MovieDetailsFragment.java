@@ -48,6 +48,7 @@ public class MovieDetailsFragment extends Fragment {
     private String movie_id = "";
     private String credit_id = "";
     private View view;
+
     private Observer<Movies> showMovieDetails = new Observer<Movies>() {
         @Override
         public void onChanged(Movies movies) {
@@ -119,6 +120,7 @@ public class MovieDetailsFragment extends Fragment {
 
         }
     };
+
     private Observer<Videos> showVideo = new Observer<Videos>() {
         @Override
         public void onChanged(Videos videos) {

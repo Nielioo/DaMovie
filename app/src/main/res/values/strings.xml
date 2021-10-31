@@ -23,4 +23,8 @@
     <string name="person_popularity">Popularity</string>
     <string name="movie_cast">Cast</string>
     <string name="movie_trailer">Trailer Video</string>
+    <string name="home">Home</string>
+    <string name="movie_trending">Movies of the Day</string>
+    <string name="movie_popular">Most Popular</string>
+    <string name="movie_topRated">Top Rated</string>
 </resources>
