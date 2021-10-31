@@ -5,6 +5,7 @@ import com.fei.damovie.model.Movies;
 import com.fei.damovie.model.NowPlaying;
 import com.fei.damovie.model.Person;
 import com.fei.damovie.model.Upcoming;
+import com.fei.damovie.model.Videos;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -39,6 +40,12 @@ public interface ApiEndPoint {
     @GET("person/{person_id}")
     Call<Person> getPersonById(
             @Path("person_id") String person_id,
+            @Query("api_key") String apiKey
+    );
+
+    @GET("movie/{movie_id}/videos")
+    Call<Videos> getVideoByMovieId(
+            @Path("movie_id") String movie_id,
             @Query("api_key") String apiKey
     );
 

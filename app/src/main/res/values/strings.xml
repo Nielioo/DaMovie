@@ -22,4 +22,5 @@
     <string name="person_birthplace">Birthplace</string>
     <string name="person_popularity">Popularity</string>
     <string name="movie_cast">Cast</string>
+    <string name="movie_trailer">Trailer Video</string>
 </resources>

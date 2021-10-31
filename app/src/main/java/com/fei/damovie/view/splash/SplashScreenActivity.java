@@ -49,12 +49,12 @@ public class SplashScreenActivity extends AppCompatActivity {
         splash_textView = findViewById(R.id.splash_textView);
 
         splash_astronout.setTranslationY(-100);
-        splash_popcorn.setTranslationY(-80);
-        splash_shadow.setTranslationY(40);
-        splash_textView.setTranslationY(80);
+        splash_popcorn.setTranslationY(-90);
+        splash_shadow.setTranslationY(20);
+        splash_textView.setTranslationY(100);
 
         splash_astronout.setAlpha(0.1F);
-        splash_popcorn.setAlpha(0.1F);
+        splash_popcorn.setAlpha(0.3F);
         splash_shadow.setAlpha(0.1F);
         splash_textView.setAlpha(0.1F);
     }

@@ -6,6 +6,7 @@ import com.fei.damovie.helper.Const;
 import com.fei.damovie.model.Movies;
 import com.fei.damovie.model.NowPlaying;
 import com.fei.damovie.model.Upcoming;
+import com.fei.damovie.model.Videos;
 import com.fei.damovie.retrofit.ApiService;
 
 import retrofit2.Call;
@@ -77,4 +78,23 @@ public class MovieRepository {
 
         return result;
     }
+
+    public MutableLiveData<Videos> getVideoData(String movie_id){
+        final MutableLiveData<Videos> result = new MutableLiveData<>();
+
+        ApiService.endPoint().getVideoByMovieId(movie_id,Const.API_KEY).enqueue(new Callback<Videos>() {
+            @Override
+            public void onResponse(Call<Videos> call, Response<Videos> response) {
+                result.setValue(response.body());
+            }
+
+            @Override
+            public void onFailure(Call<Videos> call, Throwable t) {
+                result.setValue(null);
+            }
+        });
+
+        return result;
+    }
+
 }

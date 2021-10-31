@@ -1,13 +1,6 @@
 package com.fei.damovie.view.main.movieDetails;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,19 +9,28 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.fei.damovie.R;
 import com.fei.damovie.adapter.CompanyAdapter;
-import com.fei.damovie.adapter.PersonAdapter;
 import com.fei.damovie.helper.Const;
 import com.fei.damovie.helper.ItemClickSupport;
 import com.fei.damovie.helper.ProgressBarGoogle;
-import com.fei.damovie.model.Credits;
 import com.fei.damovie.model.Movies;
+import com.fei.damovie.model.Videos;
 import com.fei.damovie.viewModel.CreditViewModel;
 import com.fei.damovie.viewModel.MovieViewModel;
 import com.flaviofaria.kenburnsview.KenBurnsView;
 import com.flaviofaria.kenburnsview.RandomTransitionGenerator;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.utils.YouTubePlayerTracker;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
 import java.util.List;
 
@@ -36,61 +38,16 @@ public class MovieDetailsFragment extends Fragment {
 
     private KenBurnsView movieDetails_backdrop_kenBurns;
     private ImageView movieDetails_poster_imageView;
-    private TextView movieDetails_title_textView, movieDetails_rating_textView,movieDetails_genre_textView, movieDetails_tagline_textView,movieDetails_overview_textView,movieDetails_popularity_textView,movieDetails_vote_textView,movieDetails_releaseDate_textView;
+    private TextView movieDetails_title_textView, movieDetails_rating_textView, movieDetails_genre_textView, movieDetails_tagline_textView, movieDetails_overview_textView, movieDetails_popularity_textView, movieDetails_vote_textView, movieDetails_releaseDate_textView, movieDetails_noTrailer_textView;
     private RecyclerView movieDetails_company_recyclerView, movieDetails_cast_recyclerView;
     private ProgressBarGoogle progressBarGoogle;
+    private YouTubePlayerView movieDetails_youTubePlayerView;
+    private YouTubePlayerTracker youTubePlayerTracker;
     private MovieViewModel movieViewModel;
     private CreditViewModel creditViewModel;
     private String movie_id = "";
     private String credit_id = "";
     private View view;
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_movie_details, container, false);
-
-        initialize();
-
-        return view;
-    }
-
-    private void setAnimation() {
-        RandomTransitionGenerator randomTransitionGenerator = new RandomTransitionGenerator(1000, new DecelerateInterpolator());
-        movieDetails_backdrop_kenBurns.setTransitionGenerator(randomTransitionGenerator);
-    }
-
-    private void initialize() {
-        progressBarGoogle = new ProgressBarGoogle(getActivity());
-        progressBarGoogle.startProgress();
-
-        movie_id = getArguments().getString("movie_id");
-
-        movieViewModel = new ViewModelProvider(getActivity()).get(MovieViewModel.class);
-        movieViewModel.setResultGetMovieById(movie_id);
-        movieViewModel.getResultGetMovieById().observe(getActivity(), showMovieDetails);
-
-//        creditViewModel = new ViewModelProvider(getActivity()).get(CreditViewModel.class);
-//        creditViewModel.setResultGetCreditById(credit_id);
-//        creditViewModel.getResultGetCreditById().observe(getActivity(), showCreditDetails);
-
-        movieDetails_backdrop_kenBurns = view.findViewById(R.id.movieDetails_backdrop_kenBurns);
-        movieDetails_poster_imageView = view.findViewById(R.id.movieDetails_poster_imageView);
-        movieDetails_title_textView = view.findViewById(R.id.movieDetails_title_textView);
-        movieDetails_rating_textView = view.findViewById(R.id.movieDetails_rating_textView);
-        movieDetails_genre_textView = view.findViewById(R.id.movieDetails_genre_textView);
-        movieDetails_genre_textView.setText("");
-        movieDetails_tagline_textView = view.findViewById(R.id.movieDetails_tagline_textView);
-        movieDetails_overview_textView = view.findViewById(R.id.movieDetails_overview_textView);
-        movieDetails_popularity_textView = view.findViewById(R.id.movieDetails_popularity_textView);
-        movieDetails_vote_textView = view.findViewById(R.id.movieDetails_vote_textView);
-        movieDetails_releaseDate_textView = view.findViewById(R.id.movieDetails_releaseDate_textView);
-        movieDetails_company_recyclerView = view.findViewById(R.id.movieDetails_company_recyclerView);
-//        movieDetails_cast_recyclerView = view.findViewById(R.id.movieDetails_cast_recyclerView);
-
-        setAnimation();
-    }
-
     private Observer<Movies> showMovieDetails = new Observer<Movies>() {
         @Override
         public void onChanged(Movies movies) {
@@ -103,18 +60,18 @@ public class MovieDetailsFragment extends Fragment {
             String tagline = movies.getTagline();
             String overview = movies.getOverview();
             String popularity = String.valueOf(movies.getPopularity());
-            String vote = String.valueOf(movies.getVote_count()) ;
+            String vote = String.valueOf(movies.getVote_count());
             String releaseDate = movies.getRelease_date();
             List<Movies.ProductionCompanies> productionCompaniesList = movies.getProduction_companies();
 
-            if(!(backdrop_path == null)){
+            if (!(backdrop_path == null)) {
                 String full_path = Const.IMG_URL + backdrop_path;
                 Glide.with(getActivity())
                         .load(full_path)
                         .into(movieDetails_backdrop_kenBurns);
             }
 
-            if(!(poster_path == null)){
+            if (!(poster_path == null)) {
                 String full_path = Const.IMG_URL + poster_path;
                 Glide.with(getActivity())
                         .load(full_path)
@@ -162,29 +119,80 @@ public class MovieDetailsFragment extends Fragment {
 
         }
     };
+    private Observer<Videos> showVideo = new Observer<Videos>() {
+        @Override
+        public void onChanged(Videos videos) {
+            MovieDetailsFragment.this.getLifecycle().addObserver(movieDetails_youTubePlayerView);
 
-//    private Observer<Credits> showCreditDetails = new Observer<Credits>() {
-//        @Override
-//        public void onChanged(Credits credits) {
-//
-//            //==Begin of Credit RecyclerView
-//            LinearLayoutManager personlayoutManager = new LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false);
-//            PersonAdapter personAdapter = new PersonAdapter(getActivity());
-//            personAdapter.setPersonList();
-//            movieDetails_company_recyclerView.setAdapter(adapter);
-//            movieDetails_company_recyclerView.setLayoutManager(layoutManager);
-//
-//            ItemClickSupport.addTo(movieDetails_company_recyclerView).setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
-//                @Override
-//                public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-//                    String company = productionCompaniesList.get(position).getName();
-//
-//                    Toast.makeText(getActivity(), company, Toast.LENGTH_SHORT).show();
-//                }
-//            });
-//            //==End of Credit RecyclerView
-//
-//        }
-//    };
+            final String video = videos.getResults().get(0).getKey();
+
+            if (video != null) {
+                movieDetails_youTubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
+                    @Override
+                    public void onReady(YouTubePlayer youTubePlayer) {
+                        super.onReady(youTubePlayer);
+
+                        youTubePlayer.cueVideo(video, 0);
+
+                    }
+                });
+            } else {
+                movieDetails_noTrailer_textView.setVisibility(View.VISIBLE);
+                movieDetails_youTubePlayerView.setVisibility(View.INVISIBLE);
+            }
+
+        }
+    };
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        view = inflater.inflate(R.layout.fragment_movie_details, container, false);
+
+        initialize();
+
+        return view;
+    }
+
+    private void setAnimation() {
+        RandomTransitionGenerator randomTransitionGenerator = new RandomTransitionGenerator(1000, new DecelerateInterpolator());
+        movieDetails_backdrop_kenBurns.setTransitionGenerator(randomTransitionGenerator);
+    }
+
+    private void initialize() {
+        progressBarGoogle = new ProgressBarGoogle(getActivity());
+        progressBarGoogle.startProgress();
+
+        movie_id = getArguments().getString("movie_id");
+
+        movieViewModel = new ViewModelProvider(getActivity()).get(MovieViewModel.class);
+
+        movieViewModel.setResultGetMovieById(movie_id);
+        movieViewModel.getResultGetMovieById().observe(getActivity(), showMovieDetails);
+
+        movieViewModel.setResultGetVideoByMovieId(movie_id);
+        movieViewModel.getResultGetVideoByMovieId().observe(getActivity(), showVideo);
+
+//        creditViewModel.setResultGetCreditById(credit_id);
+//        creditViewModel.getResultGetCreditById().observe(getActivity(), showCreditDetails);
+
+        movieDetails_backdrop_kenBurns = view.findViewById(R.id.movieDetails_backdrop_kenBurns);
+        movieDetails_poster_imageView = view.findViewById(R.id.movieDetails_poster_imageView);
+        movieDetails_title_textView = view.findViewById(R.id.movieDetails_title_textView);
+        movieDetails_rating_textView = view.findViewById(R.id.movieDetails_rating_textView);
+        movieDetails_genre_textView = view.findViewById(R.id.movieDetails_genre_textView);
+        movieDetails_genre_textView.setText("");
+        movieDetails_tagline_textView = view.findViewById(R.id.movieDetails_tagline_textView);
+        movieDetails_overview_textView = view.findViewById(R.id.movieDetails_overview_textView);
+        movieDetails_popularity_textView = view.findViewById(R.id.movieDetails_popularity_textView);
+        movieDetails_vote_textView = view.findViewById(R.id.movieDetails_vote_textView);
+        movieDetails_releaseDate_textView = view.findViewById(R.id.movieDetails_releaseDate_textView);
+        movieDetails_noTrailer_textView = view.findViewById(R.id.movieDetails_noTrailer_textView);
+        movieDetails_youTubePlayerView = view.findViewById(R.id.movieDetails_youTubePlayerView);
+        movieDetails_company_recyclerView = view.findViewById(R.id.movieDetails_company_recyclerView);
+//        movieDetails_cast_recyclerView = view.findViewById(R.id.movieDetails_cast_recyclerView);
+
+        setAnimation();
+    }
 
 }
