@@ -1,5 +1,7 @@
 # DaMovie
 
-Movie App using themoviedb API
+Movie App using TheMovieDB API implementation
 
-AFL 2021 Mobile Apps Development Semester 3
+AFL Mobile Apps Development Semester 3 (1 November 2021)
+
+Video Demo: https://youtu.be/VOYkSp87ikE
